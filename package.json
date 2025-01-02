@@ -1,0 +1,9 @@
+{
+  "version": "1.0.0",
+  "scripts": {
+    "build": "npm i ; npx jjPluginBuild"
+  },
+  "devDependencies": {
+    "jjplugin": "^2.4.2"
+  }
+}
