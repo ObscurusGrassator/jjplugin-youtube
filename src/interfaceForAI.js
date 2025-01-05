@@ -70,7 +70,7 @@ module.exports = class InterfaceForAI {
      * @param { number } [fromSecond = 0]
      * @param { boolean } [inLoop = false]
      */
-    async playYouTubeRecording(recording, fromSecond = 0, inLoop = false, startPlaying = true, list = false) {}
+    async playYouTubeRecording(recording, fromSecond = 0, inLoop = false) {}
 
     /**
      * You can tell the user the real name of the playlist you are playing: playList.name.value.

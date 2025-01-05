@@ -2,8 +2,8 @@ const PlayLists = require('./PlayLists');
 
 module.exports = addPlugin({
     playLists: {
-        YouInLinkCreateProjectThenAddCredentialYoutubeAPIKeyThereAndFinallyItCopyHere: { type: 'link', value: "https://console.cloud.google.com/cloud-resource-manager" },
-        YoutubeAPIKey: { type: 'string' },
+        youInLinkCreateProjectThenAddCredentialYoutubeAPIKeyThereAndFinallyItCopyHere: { type: 'link', value: "https://console.cloud.google.com/cloud-resource-manager" },
+        youtubeAPIKey: { type: 'string' },
         recordingMarks: { type: 'optionsList', options: ['listened', 'deleted', 'favorite'] },
         playLists: [{
             name: { type: 'string' },

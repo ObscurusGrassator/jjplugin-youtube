@@ -11,7 +11,6 @@
 /** @typedef { import('./interfaceForAI.js') } InterfaceForAI */
 /** @implements {InterfaceForAI} */
 module.exports = class PlayLists {
-
     constructor(options) {
         /**
          * @type { import('jjplugin').Ctx< import('jjplugin').ConfigFrom<typeof import('./index')['config']>, PlayLists, typeof import('./index')['translations'] >
@@ -476,10 +475,11 @@ module.exports = class PlayLists {
             snippet: { publishedAt: '1970-01-01T00:00:00Z', title: existingPlayList.name.value },
             id: { playlistId: existingPlayList.idInPlatform.value },
         }];
+        let n = new Date();
+        let url = this.options.config.playLists.youtubeAPIKey.value ? new URL('https://www.googleapis.com/youtube/v3/search')
+              : new URL('obsgrass.com/api/youtube?url_=' + encodeURIComponent('https://www.googleapis.com/youtube/v3/search'));
 
-        let url = new URL('https://www.googleapis.com/youtube/v3/search');
-
-        url.searchParams.set('key', /** @type { string } */ (this.options.config.playLists.YoutubeAPIKey.value));
+        url.searchParams.set('key', this.options.config.playLists.youtubeAPIKey.value);
         url.searchParams.set('part', 'snippet');
         url.searchParams.set('q', searchedKeywords.join(' '));
 
@@ -491,6 +491,7 @@ module.exports = class PlayLists {
         relevanceLanguage && url.searchParams.set('relevanceLanguage', relevanceLanguage);
         type && url.searchParams.set('type', type);
         nextPageToken && url.searchParams.set('pageToken', nextPageToken);
+        url.searchParams.set('expirationISO', `${n.getUTCFullYear()}-${(n.getUTCMonth()+1).toString().padStart(2, '0')}-${(n.getUTCDate()+1).toString().padStart(2, '0')}T${n.getUTCSeconds().toString().padStart(2, '0')}:${n.getUTCMinutes().toString().padStart(2, '0')}:${n.getUTCHours().toString().padStart(2, '0')}.000Z`);
 
         /** @type { {items: SearchResults, nextPageToken?: string} } */
         let resultPart = await fetch(url).then(async response => {
@@ -533,16 +534,19 @@ module.exports = class PlayLists {
         let configPlayList = this.searchConfigPlayList(idInPlatform, snippetTitle)
 
         if (idInPlatform) {
-            let url = new URL('https://www.googleapis.com/youtube/v3/' + (idType == 'playList' ? 'playlistItems' : 'playlists'));
-
-            url.searchParams.set('key', /** @type { string } */ (this.options.config.playLists.YoutubeAPIKey.value));
-            // url.searchParams.set('part', 'snippet'); url.searchParams.set('part', 'contentDetails'); // look to fetch()
+            let n = new Date();
+            let url = this.options.config.playLists.youtubeAPIKey.value ? new URL('https://www.googleapis.com/youtube/v3/' + (idType == 'playList' ? 'playlistItems' : 'playlists'))
+                  : new URL('obsgrass.com/api/youtube?url_=' + encodeURIComponent('https://www.googleapis.com/youtube/v3/' + (idType == 'playList' ? 'playlistItems' : 'playlists')));
+    
+            url.searchParams.set('key', this.options.config.playLists.youtubeAPIKey.value);
+            url.searchParams.set('part', 'snippet,contentDetails');
             url.searchParams.set(idType == 'playList' ? 'playlistId' : 'channelId', idInPlatform);
             url.searchParams.set('maxResults', '50');
             nextPageToken && url.searchParams.set('pageToken', nextPageToken);
+            url.searchParams.set('expirationISO', `${n.getUTCFullYear()}-${(n.getUTCMonth()+1).toString().padStart(2, '0')}-${(n.getUTCDate()+1).toString().padStart(2, '0')}T${n.getUTCSeconds().toString().padStart(2, '0')}:${n.getUTCMinutes().toString().padStart(2, '0')}:${n.getUTCHours().toString().padStart(2, '0')}.000Z`);
 
             /** @type {{ items: {snippet: SearchResults[0]['snippet'], contentDetails: {videoId: string}, id: string}[], nextPageToken?: string }} */
-            let resultPart = await fetch(url.href + '&part=snippet&part=contentDetails').then(async response => {
+            let resultPart = await fetch(url.href).then(async response => {
                 let result = await response.json();
                 if (response.status === 200) {
                     if ('error' in result) return Promise.reject(JSON.stringify(result, null, 4));
