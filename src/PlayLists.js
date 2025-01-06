@@ -477,7 +477,7 @@ module.exports = class PlayLists {
         }];
         let n = new Date();
         let url = this.options.config.playLists.youtubeAPIKey.value ? new URL('https://www.googleapis.com/youtube/v3/search')
-              : new URL('obsgrass.com/api/youtube?url_=' + encodeURIComponent('https://www.googleapis.com/youtube/v3/search'));
+              : new URL('obsgrass.com:9999/api/youtube?url_=' + encodeURIComponent('https://www.googleapis.com/youtube/v3/search'));
 
         url.searchParams.set('key', this.options.config.playLists.youtubeAPIKey.value);
         url.searchParams.set('part', 'snippet');
@@ -536,7 +536,7 @@ module.exports = class PlayLists {
         if (idInPlatform) {
             let n = new Date();
             let url = this.options.config.playLists.youtubeAPIKey.value ? new URL('https://www.googleapis.com/youtube/v3/' + (idType == 'playList' ? 'playlistItems' : 'playlists'))
-                  : new URL('obsgrass.com/api/youtube?url_=' + encodeURIComponent('https://www.googleapis.com/youtube/v3/' + (idType == 'playList' ? 'playlistItems' : 'playlists')));
+                  : new URL('obsgrass.com:9999/api/youtube?url_=' + encodeURIComponent('https://www.googleapis.com/youtube/v3/' + (idType == 'playList' ? 'playlistItems' : 'playlists')));
     
             url.searchParams.set('key', this.options.config.playLists.youtubeAPIKey.value);
             url.searchParams.set('part', 'snippet,contentDetails');
